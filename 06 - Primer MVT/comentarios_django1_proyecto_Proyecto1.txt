@@ -1,0 +1,134 @@
+1. Django, conceptos:
+    1.1. Las "views" van a alojar las funciones/controladores.
+    1.2. Los "templates" van a tener las vistas de mi sitio.
+    1.3. El modelo es de donde el controlador va a buscar datos (va a ser la base de datos).
+    1.4. Entonces, en vez de ser un "M.V.C." (model view controller), Django es un "M.T.V." (model template view).
+
+2. Django, instalacion:
+    2.1. www.djangoproject.com
+    2.2. Vamos a la consola y ejecutamos la linea --> pip install Django
+        2.2.1 En caso de querer instalar una determinada version --> pip install Django==4.1
+    2.3. Podemos ver si la tenemos bien instalada abriendo consola "cmd" y ejecutando:
+        2.3.1. python
+        2.3.2. import django
+        2.3.3. django.VERSION
+
+3. Crear proyecto (Proyecto1):
+    3.1. Genero carpeta vacia, y abro una consola desde Visual Studio Code (terminal, new) y tipeamos:
+        3.1.1. django-admin startproject Proyecto1
+        3.1.2. Vemos como se genera la carpeta Proyecto1 (es un paquete) con varios archivos .py (son modulos).
+    3.2. Tenemos que ir al directorio del PROYECTO Proyecto1 generado, entonces tipeamos en consola:
+        3.2.1. cd ./Proyecto1
+        3.2.2. Con esto hemos entrado al PROYECTO (distinto del PAQUETE).
+    3.3. Luego, para CONFIGURAR Y CREAR LA BASE DE DATOS (agarrar todo lo que necesite mi base de datos, y crearla) ejecutamos:
+        3.3.1. python manage.py migrate
+        3.3.2. Vamos a ver como se genera la base de datos "db.sqlite3" en el PROYECTO Proyecto1.
+        3.3.3. Cada vez que tenga que guardar o configurar cosas nuevas, debo ejecutar lo anterior.
+    3.4. Ahora vamos a correr el servidor local, para probar si todo anda bien:
+        3.4.1. python manage.py runserver
+        3.4.2. Se muestra la "url" de donde vamos a ir accediendo al sitio.
+
+4. Primer view (saludo):
+    4.1. Dentro del PAQUETE Proyecto1 creamos views.py (ahi van a estar las vistas del PROYECTO)
+    4.2. Voy a actuar como "servidor local", entonces voy a dar respuestas al cliente (usuario). Por ello se importa en views.py:
+        4.2.1. from django.http import HttpResponse
+    4.3. En views.py vamos a generar las vistas "basadas en funciones", que reciben "peticiones" (request) como argumentos.
+    4.4. Luego responde como "HttpResponse" una cadena de texto (o lo que sea).
+    4.5. Tengo que decirle que tome como "url" a esa vista:
+        4.5.1. Voy a urls.py
+        4.5.2. Importo la vista como modulo desde el PAQUETE Proyecto1:
+            4.5.2.1. from Proyecto1.views import saludo
+        4.5.3. Agrego en "urlpatterns":
+            4.5.3.1. path('saludo/', saludo, name='saludar'),
+            4.5.3.2. name='saludar' <-- lo vemos mas adelante, no es necesario actualmente.
+
+5. Otra view (segunda_vista):
+    5.1. Voy a "views.py" y genero una nueva funcion. DATO: se puede poner codigo HTML.
+    5.2. Voy a "urls.py", importo la funcion (como modulo del PAQUETE) y agregamos en "urlpatterns" la nueva view.
+
+6. Otra view (dia_de_hoy):
+    6.1. Voy a "views.py" y genero una nueva funcion. 
+    6.2. Esta nueva funcion usa la libreria "datetime", por lo cual, debo importarla.
+    6.2. Voy a "urls.py", importo la funcion (como modulo del PAQUETE) y agregamos en "urlpatterns" la nueva view.
+        6.2.1. Para importar podria hacer "import Proyecto1.views as proyecto" y ahi ir llamando las funciones como proyecto.saludo, proyecto.segunda_vista, o proyecto.dia_de_hoy. Esto sirve cuando hay muchas views.
+
+6. Pasaje de parámetros desde la URL:
+    6.1. (para que pueda procesar desde la url).
+    6.2. Definimos nueva vista (saludo_con_nombre), que va a recibir el parametro "nombre":
+        6.2.1. def saludo_con_nombre (request, nombre)
+        6.2.2. devuelve codigo (html) con el parametro "nombre" (el cual lo esta esperando).
+        6.2.3. Voy a "urls.py", importo la funcion (como modulo del PAQUETE) y agregamos en "urlpatterns" la nueva view. La diferencia es que en "urlpatterns" va a agregarse como:
+            6.2.3.1. path('saludo_con_nombre/<nombre>', saludo_con_nombre),
+            6.2.3.2. No olvidarse del uso de las comillas al agregar URLS.
+    6.3. Como ejercicio, hicimos la vista "calcula_anio_nacimiento".
+
+7. Plantillas de Django (Templates):
+    7.1. Separan la vista del controlador de lo estetico. O sea, es como se muestra la info.
+    7.2. Dentro del PROYECTO Proyecto1 genero una carpeta llamada "Plantillas".
+    7.3. Dentro de "Plantillas" genero una nueva plantilla, con nombre "template1.html"
+        7.3.1. Creamos el esqueleto de ese html (una forma facil, es usar el signo "!" o escribir "html5").
+        7.3.2. Cambiamos el "Title" situado en el "Header"
+        7.3.3. Dentro del "Body" agregamos una nueva linea, sin variables.
+    7.4. Generamos una nueva "view" en "views.py" dentro del paquete "Proyecto1", llamada "probandohtml":
+        7.4.1. Tenemos que abrir la ruta del "template1" (usamos la funcion "open"), que para ello copiamos la ruta de acceso dandole doble click a "template1".
+            7.4.1.1. Ojo que en windows hay que usar la barra "/" para evitar los caracteres de escape (\n, \t, por ejemplo).
+            7.4.1.2. Hay dos rutas de acceso, pero la relativa nos permite laburar exportando el proyecto (esto se usa en entregas).
+            7.4.1.3. En este caso, debo salir con la terminal, del PAQUETE, y acceder nuevamente, para lo cual se usa el "./"
+            7.4.1.4. Si quisiese salir 2 carpetas, deberia anteponer "../" (este caso es el del ejemplo en clase).
+        7.4.2. Genero una variable "plantilla" que me convierte a formato "Template" el archivo previamente abierto (template1.html).
+            7.4.2.1. Para usar esto debo importar --> from django.template import Template
+        7.4.3. Genero una variable "contexto", que son como "parametros" (datos sacados de una base de datos). Por ahora van vacios.
+            7.4.3.1. Para ello debo importar from django.template import Context
+        7.4.4. Con mi "plantilla" y "contexto" armo mi "documento" con un renderizado (convertir el codigo html listo para mostrar):
+           7.4.4.1. documento = plantilla.render(contexto) 
+        7.4.5. Despues, tenemos que hacer un "return" del documento con HttpResponse.
+    7.5. Pasamos a agregar esta nueva "view" en "url.py".
+        7.5.1. Importamos la "view" dentro del PAQUETE Proyecto1.
+        7.5.2. Agregamos la "view" dentro de "urlpatterns".
+
+--------------------------------------------PARTE 2--------------------------------------------------------------
+
+8. Mejoras en las plantillas Django:
+    8.1. Variables a las plantillas:
+        8.1.1. En views.py
+            8.1.1.1. Modifico la funcion "probandohtml", agregando variables: nombre, apellido, edad.
+            8.1.1.2. Genero diccionario con esas variables.
+            8.1.1.3. Ese diccionario lo ingreso como mi contexto.
+        8.1.2. En "template1.html" hago uso de esas "claves" del diccionario, con lenguaje "jinja", dentro de las lineas "html".
+            8.1.2.1. RESPETAR LOS ESPACIOS PORQUE JINJA ES METICULOSO.
+            8.1.2.2. Ademas, puedo ponerle "styles" o clases (definidas en un .css) a esas lineas "html".
+            8.1.2.3. El "UTF-8" del "header" es el causando de dar problemas con letras "ñ".
+        8.1.3. Como hice una modificaciones de las "views.py", tengo que usar python manage.py runserver.
+    8.2. Bucles y condicionales en las plantillas:
+        8.2.1. Si hiciera una lista como variable en "views.py", puedo usar "for", con {% for nota in lista %} y cerrando con {% endfor %}
+        8.2.2. Si quiero un "style" diferente para cada linea "html", puedo usar "if", con {% if nota > 5 %} y cerrando con {% endif %}
+
+9. Cargadores de plantillas Django:
+    9.1. El punto 7.4 es engorroso al tener varias plantillas, entonces este concepto de "cargador" nos lo facilita.
+    9.2. Voy a "views.py" e importamos  from django.template import loader
+    9.3. Para evitar usar "open(ruta de acceso)" para cada plantilla:
+        9.3.1. Vamos a "settings.py" dentro del PAQUETE Proyecto1.
+            9.3.1.1. Vamos a "TEMPLATES" y ponemos la ruta de acceso de la carpeta de plantillas: 
+                9.3.1.1.1. 'DIR':[], --> 'DIRS': ["../Proyecto1/Plantillas"],
+                9.3.1.1.2. Recordar el uso de "/" en windows para evitar caracteres de escape ("\n", "\t").
+        9.3.2. Modificamos ahora en "views.py" la funcion "probandohtml(request)" como:
+                def probandohtml(request):
+                    plantilla = loader.get_template("template1.html")
+                    documento = plantilla.render(diccionario)
+                    return HttpResponse(documento)
+        9.3.3. Es como ir a sacar las plantillas (template1.html, template2.html) ubicadas en una carpeta (Plantillas), definida su ruta en "settings.py".
+
+                
+
+
+
+        
+
+           
+
+
+
+
+
+
+
