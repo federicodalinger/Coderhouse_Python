@@ -91,3 +91,8 @@
         14.7.2. En caso de querer cambiarlo --> git remote set-url origin https://github.com/federicodalinger/MVT_Dalinger
         14.7.3. En caso de querer forzar una subida: git push -f origin master (With the -f tag you will override the remote branch code with your local repo code.)
     14.8  LINK REPOSITORIO DESAFIO ENTREGABLE "https://github.com/federicodalinger/MVT_Dalinger.git"
+
+15. Git (modificaciones):
+    15.1. We can easily create an alias for those "unadd" and "unstage" commands:
+        15.1.1. git config --global alias.unadd 'reset HEAD --'
+        15.1.2.git config --global alias.unstage 'reset HEAD --'
