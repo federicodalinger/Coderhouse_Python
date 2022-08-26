@@ -22,11 +22,32 @@
 
 3. Templates:
     3.1. Genero carpeta "templates" dentro de la App.
-    3.2. Genero carpeta "MVT_DALINGER" dentro de "templates" (2.3.1)
+    3.2. Genero carpeta "MVT_DALINGER_App" dentro de "templates" (2.3.1)
     3.3. Creo los templates de cada una de las vistas generadas anteriormente.
-    3.4. Modifico las vistas haciendo que ahora hagan un render sobre cada template generado/vinculado, desde una ruta relativa INTERPRETADA SIEMPRE DESDE TEMPLATES. Por eso la importancia del paso 2.3.1 y 2.3.2, manteniendo "templates" como nombre de esa carpeta. En "settings.py" del proyecto se ve en a primer linea "TEMPLATE = [...]" que hace mencion a esto ultimo, y sino, seria necesario decirselo anteponiendo por ejemplo "plantillas/MVT_DALINGER/inicio.html" en las vistas.
-    3.5. Como todo esto funciona, hacemos un commit.
+    3.4. Modifico las vistas haciendo que ahora hagan un render sobre cada template generado/vinculado, desde una ruta relativa INTERPRETADA SIEMPRE DESDE TEMPLATES. Por eso la importancia del paso 2.3.1 y 2.3.2, manteniendo "templates" como nombre de esa carpeta. En "settings.py" del proyecto se ve en a primer linea "TEMPLATE = [...]" que hace mencion a esto ultimo, y sino, seria necesario decirselo anteponiendo por ejemplo "plantillas/MVT_DALINGER_App/inicio.html" en las vistas.
 
 4. Mejorando Templates:
-    4.1. 
+    4.1. El mas conocido para esto seria con http://getbootstrap.com
+    4.2. Pero nosotros vamos a utilizar y bajamos desde http://www.startbootstrap.com/previews/landing-page 
+        4.2.1. Descargamos eso, y vamos a copiar el archivo "index.html" dentro de "MVT_DALINGER_App\templates\MVT_DALINGER".
+            4.2.1.1. Este ultimo reemplazaria al "inicio.html". Por ello, la que nosotros habiamos creado ahora la borramos.
+            4.2.1.2. Ojo, no tiene los archivos estaticos para funcionar (iconos, js, css, etc.). Por ello creamos una carpeta "static" dentro de "MVT_DALINGER_App" y alli mismo, otra llamada "MVT_DALINGER_App". Dentro de esa ultima, ahi si ponemos los archivos estaticos sacados del punto 4.2.
+        4.2.2. Queda ahora vincular esos archivos estaticos con la del inicio:
+            4.2.2.1. Voy a "templates/MVT_DALINGER_App/inicio.html" y cambio el "head", poniendo:
+                4.2.2.1.1. {% load static %}
+                4.2.2.1.2. Con eso le digo que busque los archivos estaticos definidos en "settings.py" del proyecto, como "STATIC_URL = 'static/'"
+            4.2.2.2. Ahora, para los demas archivos referidos como rutas estaticas (css, js), debo modificar con "jinja" su ruta. O sea, se modifica <link href="css/styles.css" rel="stylesheet" />, por <link href="{% static '/MVT_DALINGER_App/css/styles.css' %}" rel="stylesheet" />
+            4.2.2.3. Lo mismo ocurre con las imagenes, y por eso es que actualmente no se muestran.
+        4.2.3. Hacemos leve cambio en "inicio.html" y agregamos botones, vinculado a las "views" definidas en la App.
+            4.2.3.1. btn-primary define el color (por ejemplo, btn-danger es rojo). Cambiamos los colores de los botones entonces.
+            4.2.3.2. Borramos el <form/>
+            4.2.3.3. Cambiamos la referencia de los botones con "jinja" y ademas en los "urls.py" se le agrega el "name" a cada "URL" de cada "view" en view.py de MVT_DALINGER_App.
+    4.3. Info de donde sacar otros css (calculo que para bootstrap): http://free-css.com
+    4.4. Por las dudas hacemos un commit.
+        
+
+
+
+
+
 
