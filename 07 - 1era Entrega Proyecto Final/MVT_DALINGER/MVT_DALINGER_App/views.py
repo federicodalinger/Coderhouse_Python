@@ -29,6 +29,8 @@ def nuevo_familiar(request):
 def inicio (request):
     # return HttpResponse("Pagina de inicio")
     return render (request, "MVT_DALINGER_App/inicio.html")
+    # Para el uso de contexto:
+    # return render (request, "MVT_DALINGER_App/inicio.html", contexto)
 
 def curso (request):
     # return HttpResponse("Pagina de cursos")

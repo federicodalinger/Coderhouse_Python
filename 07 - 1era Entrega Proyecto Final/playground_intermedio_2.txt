@@ -1,0 +1,57 @@
+1. Herencia de Templates:
+    1.1. Duplicamos el archivo "inicio.html" por "padre.html" y borramos todo el contenido del inicio.html
+    1.2. En padre busco lugares que yo quiera cambiar:
+        1.2.1. En el header --> {% block titulo_de_pagina %} {% endblock %}
+        1.2.2. Debajo del header, genero un <div> y coloco --> {% block contenid_que_cambia %} {% endblock %}
+        1.2.3. Ese padre.html nunca se va a mostrar. Solo se lo usa como "herenciador" de los demas .html
+    1.3. En las paginas a usar, el "padre.html" como base, debo colocar, por ejemplo en el inicio:
+        {% extends "MVT_DALINGER_App/padre.html" %}
+        {% load static %}
+        {% block titulo_de_pagina %}
+            <h1 class="mb-5">ESTE TITULO VIENE DE INICIO</h1>
+        {% endblock %}
+        {% block contenido_que_cambia %}
+            <h1>ESTE ES EL CONTENIDO QUE CAMBIO EN PAG INICIO</h1>
+        {% endblock %}
+
+2. Panel de Administracion:
+    2.1. Crear usuario administrador de todo el sistema:
+        2.1.1. Consola --> python manage.py createsuperuser
+        2.1.2. Consola, ponemos el nombre --> admin
+        2.1.3. Consola, ponemos el mail --> admin@gmail.com
+        2.1.4. Consola, ponemos clave dos veces (en ambos casos, no muetra cuando escribo) --> admin
+        2.1.5. Consola, bypaseo la posible similitud.
+        2.1.6. Puedo crear tantos superusuarios como yo quiera.
+    2.2. Ahora voy a la url del servidor local, con agregado de /admin, y cargo el superusuario y clave generado.
+    2.3. La idea es poder administrar todos los modelos desde el panel de control.
+        2.3.1. Tengo que cargar los modelos en "admin.py".
+        2.3.2. admin.py --> "from .models import *"  
+                            "admin.site.register(Familiar)"
+
+                            "admin.site.register(Curso)" <-- no usado en MVT_DALINGER
+                            "admin.site.register(Estudiantes)" <-- no usado en MVT_DALINGER
+                            "admin.site.register(Profesor)" <-- no usado en MVT_DALINGER
+                            "admin.site.register(Entregables)" <-- no usado en MVT_DALINGER
+        2.3.3. Los objetos creados con las clases de models.py se ven en forma de lista. Le faltaria representarlo modificando el modelo con un "def __str__(self)". Esto es para verlo mas facil sin tener que entrar a cada objeto.
+    2.4. Recordar que en caso de querer borrar esa base de datos (generar el archivo "db.sqlite3" desde cero), se podria hacer desde la consola con:
+        2.4.1. --> python manage.py makemigrations
+        2.4.2. --> python manage.py migrate
+    2.5. Por las dudas hacemos un commit.
+
+3. Extras:
+    3.1. El contexto para cada renderizado de las views debe ponerse luego una coma ",".
+        3.1.1. Recordar que "Curso" es una clase que genera objetos con funcion constructora como sigue abajo:
+                curso1=Curso(nombre="cursito de python", comision=31100)
+                curso1.save() 
+                curso2=Curso(nombre="cursito de django", comision=31100)
+                curso2.save() 
+                lista=[curso1, curso2]
+                return render (request, "Appcoder/cursos.html", {"listita" : lista})
+        3.1.3. html --> {% for curso in listita %}
+                        <h1>{{ curso }}</h1>
+                        {% endfor %}
+    3.2. "request" es un objeto, que recibe "get o "post" (ademas hay "put" y "delete").
+        3.2.1. Por ejemplo "def profesores ( request, nombre )" seria un "get", porque el "post" ya tiene incluido "nombre" dentro del "request". 
+
+
+
