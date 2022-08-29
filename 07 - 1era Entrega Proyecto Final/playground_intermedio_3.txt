@@ -1,0 +1,62 @@
+1. Formularios:
+    1.2 La info va por GET (aca la info se ve en url, como google) o POST (en este caso la info no se ve en url)
+    1.3. Creacion Formulario html:
+        1.3.1. Vamos a las views de la app y hacemos una nueva (nuevo_familiar_formulario).
+        1.3.2. Vamos a los templates/MVT_DALINGER_App y hacemos una nueva pagina/template (nuevo_familiar_formulario.html).
+            1.3.2.1. Ahi mismo vamos a meter el formulario:
+                1.3.2.1. "Action" es la "url" donde va a ir cuando aprete el boton del formulario. 
+                1.3.2.2. "Method" es el metodo que vimos antes en playground_intermedio_2.txt
+                1.3.2.3. Recordar que para evitar cargar cualquier dato "externo" al formulario, por "pishing" debo "darle seguridad", poniendo el {% csrf_token %}. Con esto evito que venga otro y modifique el formulario, y que el servidor lo tome como valido, ya que tal servidor solo se queda con formularios con ese token.
+            1.3.2.2. Completamos el formulario con <p>, <input>:
+                1.3.2.3. Los campos de "name" tiene que tener semantica, porque luego los vinculo para ser "tomados" como info para ir a generar los objetos mediante la funcion constructora, usando la clase "Familiar".
+        1.3.3. Vamos a las urls.py de la App y generamos la "url" del template generado
+        1.3.4. Agregamos ademas el boton en el "padre.html"
+        1.3.5. Si la info viene por "POST" va a generar el objeto, guardarlo y luego RENDERIZAR la pagina de inicio, pero en la URL se va a ver la nuevo_familiar_formulario. Sino (por "GET"), solo RENDERIZA el formulario (nuevo_familiar_formulario) y la "url" NO CAMBIA, porque el "submit" del formulario no fue ejecutado.
+
+2. Formularios (form DJANGO):
+    2.1. Generamos el "forms.py" dentro de la App. Ahi van a estar los formularios generados antes.
+        2.1.1. Hacemos que importe "from django import forms"
+        2.1.2. Es como volver a generar la clase hecha en "models.py", pero notar que inicia con "form." 
+    2.2. La vista "nuevo_familiar_formulario" la cambiamos:
+        2.4.1. Notar que hemos comentado la funcion. Lo anterior ahora lo hacemos de otra forma que permita validar desde el Front-End.
+        2.4.2. Si el comando viene por "POST", genera "formulario_familiar" con los datos ingresados:
+            2.4.2.1. Si fuese valido:
+                2.4.2.1.1. Extrae la info necesaria con "cleaned_data".
+                2.4.2.1.2. Esa info es un OBJETO (creado en la clase "Familiar_formulario") la cual la uso para acceder a las claves "nombre", "edad" y "fecha_alta".
+                2.4.2.1.3. Despues creo el familiar con esos datos extraidos, lo guardo, y hago un render agregando un CONTEXTO que es el "mensaje" (renderizado en "inicio.html"). 
+            2.4.2.2. Si NO fuese valido:
+                2.4.2.2.1. Hace un render agregando un CONTEXTO que es el "mensaje" con "error" (renderizado en "inicio.html"). 
+        2.4.3. Si el comando viene por "GET", genera "formulario_familiar" pero VACIO (para poder completarlo), el cual lo renderiza en "nuevo_familiar_formulario.html", con el contexto "formulario".
+    2.3. Ese "formulario" (contexto), que se obtiene por "GET", se muestra en "nuevo_familiar_formulario.html" mediante <table>, y se lo importa como --> <table> {{ formulario.as_table }} </table>
+        2.3.1. Por eso es que se comentaron los <p><input>, porque ahora se generan cada vez que accedo por GET que es como acceder por url, que finalmente es como acceder por el boton del menu (generado previamente).
+
+3. Busqueda de datos (por form) dentro de la base de datos:
+    3.1. Creo una nueva view dentro de views.py (busqueda_edad).
+        3.1.1. Hago un render y return sobre "busqueda_edad.html".
+    3.2. Creo el html (busqueda_edad.html):
+        3.2.0. Recordar asociarla con urls.py
+        3.2.1. La info que llega al formulario de busqueda podria llegar por POST o GET. Pero como es una cadena de texto, no importante, con GET me alcanza.
+        3.2.2. Defino el "input".
+        3.2.3. El "action" del formulario va a ir a una vista (buscar) que busque estos valores.
+    3.3. Defino esa view de busqueda (buscar):
+        3.3.1. Con el metodo .get voy a obtener esa info a buscar ("nombre").
+        3.3.2. Luego, los objetos que son creados en la clase "Familiar" ya tienen una forma de buscar por clave (.objects) y despues se filtra por clave deseada (.filter(nombre=nombrecito))
+        3.3.3. Filter va a traer TODO lo relacionado con clave "nombre" poseedora de "nombrecito", que sale del "submit" del formulario previo; FILTER da como resultado una lista, por mas que solo tenga 1 objeto.
+            3.3.3.1. Si hubiese usado GET en vez de FILTER, ahi solamente obtengo 1 valor (el primero que encuentra).
+            3.3.3.2. Si hubiese usado ALL, ahi obtengo todos los objetos
+            3.3.3.3. Podria usar un "busca algo que contenga tal cosa", mediante el "__icontains". Es una busqueda no exacta.
+        3.3.4. Si hubiese encontrado algo, la longitud del "objeto" seria diferente de cero.
+            3.3.4.1. En este caso se renderiza el "resultado_busqueda.html" con el contexto "personas".
+            3.3.4.2. Se usa ese contexto para mostrarlo, como lista, en el "resultado_busqueda.html"
+        3.3.5. Si no hubiese encontrado algo, por no estar ese nombre en la base de datos, la longitud del objeto seria nula.
+            3.3.5.1. En ese caso, se renderiza "resultado_busqueda.html" pero incluyendo el contexto "mensaje".
+        3.3.6. Recordar incluir "resultado_busqueda.html" en "urls.py"
+        3.3.7. Es decir que, de cualquier forma se renderiza "resultado_busqueda.html", pero SI el mensaje fuese distinto de nulo (creado como contexto en el caso de tamaño de objeto nulo), se muestra. En caso contrario, no lo muestra y hace el "for" para mostrar las personas (nombre y edad) que coinciden con la busqueda.
+
+4. Ordenamiento de Template:
+    4.1. Agregamos el mostrado de error cuando ingresamos mal el valor. Esto es para "nuevo_familiar_formulario.html"
+        4.1.1. Si hubiese mal cargado los datos, figura el error, sino, no.
+        4.1.2. Si hubiese cargado algo distinto de vacio, agrego la linea "if request.GET["nombre"]:" en la funcion buscar (views.py), la cual seria "True", y ejecuta lo anterior. Sino, avisa del error con un mensaje que ademas es agregado en "busqueda_edad.html".
+         
+
+    

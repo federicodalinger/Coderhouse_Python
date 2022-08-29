@@ -1,0 +1,35 @@
+{% extends "MVT_DALINGER_App/padre.html" %}
+
+{% load static %}
+
+{% block titulo_de_pagina %}
+
+    <h1 class="mb-5">ESTE TITULO VIENE DE nuevo_familiar_formulario</h1>
+    
+{% endblock %}
+
+{% block contenido_que_cambia %}
+
+    <h1>Formulario de carga de "nuevo_familiar":</h1>
+
+    {% if formulario.errors %}
+        <p style="color: red;"> Mal cargados los datos, revisar.</p>
+    {% endif %}
+
+    <form action="{% url 'nuevo_familiar_formulario' %}", method="POST"> {% csrf_token %}
+
+        <!-- <p>Nombre: <input type="text", name="nombre"> </p>
+        <p>Edad: <input type="number", name="edad"> </p>
+        <p>Fecha de alta (YYYY-MM-D), con guiones: <input type="text", name="fecha_alta"> </p>  -->
+        <!--La forma de carga de fecha es asi en django-->
+
+        <table>
+            {{ formulario.as_table }}
+        </table>
+
+        <input type="submit" value = "Enviar">
+
+    </form>
+
+{% endblock %}
+

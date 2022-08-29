@@ -22,11 +22,14 @@
         <!-- Navigation-->
         <nav class="navbar navbar-light bg-light static-top">
             <div class="container">
-                <a class="navbar-brand" href="{% url 'inicio' %}">INICIO</a> <!--LLEVAME A LA URL CON NOMBRE "INICIO"-->
+                <!-- <a class="navbar-brand" href="{% url 'inicio' %}">INICIO</a> LLEVAME A LA URL CON NOMBRE "INICIO" -->
+                <a class="btn btn-primary href="{% url 'inicio' %}">INICIO</a> <!--LLEVAME A LA URL CON NOMBRE "INICIO"-->
+                <a class="btn btn-warning" href="{% url 'busqueda_edad' %}">Busqueda por Edad</a>
                 <a class="btn btn-danger" href="{% url 'profesores' %}">Profesores</a>
+                <a class="btn btn-warning" href="{% url 'nuevo_familiar_formulario' %}">Nuevo Familiar - Formulario</a>
                 <a class="btn btn-success" href="{% url 'estudiantes' %}">Estudiantes</a>
                 <a class="btn btn-warning" href="{% url 'curso' %}">Curso</a>
-                <a class="btn btn-light" href="{% url 'entregables' %}">Entregables</a>
+                <a class="btn btn-danger" href="{% url 'entregables' %}">Entregables</a>
                 <a class="btn btn-primary" href="#signup">Registrate!</a>
 
             </div>
